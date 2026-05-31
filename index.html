@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VibeDraftr</title>
+    <meta name="description" content="VibeDraftr — AI sports fantasy drafting. Good vibes, better picks." />
+    <link rel="icon" type="image/png" href="/vd-dark.png" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/png" href="/vd-light.png" media="(prefers-color-scheme: dark)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
+        const theme = localStorage.getItem('vibe-theme') || 'system';
+        const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('light', !isDark);
+        document.documentElement.classList.toggle('dark', isDark);
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
