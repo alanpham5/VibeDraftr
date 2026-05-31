@@ -42,6 +42,7 @@ function getDesktopGridColumns(pickerCount) {
 
 function App() {
   const [status, setStatus] = useState("idle");
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [draftOrder, setDraftOrder] = useState([]);
   const [league, setLeague] = useState(null);
   const [rounds, setRounds] = useState(10);
@@ -265,6 +266,17 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!showCancelModal) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowCancelModal(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showCancelModal]);
+
   const handleCancelDraft = async () => {
     try {
       await fetch("/api/draft/cancel", { method: "POST" });
@@ -441,7 +453,7 @@ function App() {
                       <button
                         type="button"
                         className="draft-cancel-btn"
-                        onClick={handleCancelDraft}
+                        onClick={() => setShowCancelModal(true)}
                         aria-label="Cancel draft"
                         title="Cancel draft"
                       >
@@ -567,6 +579,49 @@ function App() {
             >
               New Draft
             </button>
+          </div>
+        </div>
+      )}
+
+      {showCancelModal && (
+        <div
+          className="modal-overlay animate-fade"
+          onClick={() => setShowCancelModal(false)}
+        >
+          <div
+            className="modal-container animate-scale"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirm-cancel-title"
+            aria-describedby="confirm-cancel-desc"
+          >
+            <h2 className="modal-title" id="confirm-cancel-title">
+              Cancel Draft?
+            </h2>
+            <p className="modal-message" id="confirm-cancel-desc">
+              Are you sure you want to cancel the active draft? All progress
+              will be lost.
+            </p>
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="modal-btn modal-btn--cancel"
+                onClick={() => setShowCancelModal(false)}
+              >
+                Keep Drafting
+              </button>
+              <button
+                type="button"
+                className="modal-btn modal-btn--confirm"
+                onClick={async () => {
+                  setShowCancelModal(false);
+                  await handleCancelDraft();
+                }}
+              >
+                Yes, Exit Draft
+              </button>
+            </div>
           </div>
         </div>
       )}

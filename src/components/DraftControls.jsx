@@ -199,7 +199,6 @@ function DraftControls({ onStart }) {
   };
 
   const removeParticipant = (id) => {
-    if (participants.length <= 2) return;
     setParticipants((prev) => relabelParticipants(prev.filter((p) => p.id !== id)));
   };
 
@@ -373,7 +372,7 @@ function DraftControls({ onStart }) {
 
     onStart({
       league,
-      rounds,
+      rounds: parseInt(rounds, 10) || 1,
       participants: participants.map(({ id, model, label, strategy }) => ({
         id,
         model,
@@ -463,18 +462,30 @@ function DraftControls({ onStart }) {
             </label>
           </div>
 
-          <div className="field animate-in animate-delay-4">
-            <label>Rounds</label>
+          <div className="field field-row animate-in animate-delay-4">
+            <label htmlFor="rounds-input">Rounds</label>
             <input
+              id="rounds-input"
               type="number"
               min={1}
               max={30}
               value={rounds}
-              onChange={(e) =>
-                setRounds(
-                  Math.max(1, Math.min(30, parseInt(e.target.value) || 1)),
-                )
-              }
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "") {
+                  setRounds("");
+                  return;
+                }
+                const num = parseInt(val, 10);
+                if (!isNaN(num)) {
+                  setRounds(Math.min(30, num));
+                }
+              }}
+              onBlur={() => {
+                if (rounds === "" || rounds < 1) {
+                  setRounds(1);
+                }
+              }}
             />
           </div>
 
@@ -506,7 +517,7 @@ function DraftControls({ onStart }) {
                     onRemove={removeParticipant}
                     onStrategyChange={updateStrategy}
                     onHumanLabelChange={updateHumanLabel}
-                    canRemove={participants.length > 2}
+                    canRemove={true}
                   />
                 </div>
               ))}

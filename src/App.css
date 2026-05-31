@@ -506,7 +506,7 @@ body {
 }
 
 .field label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-secondary);
   padding-left: 4px;
@@ -630,7 +630,7 @@ input::placeholder {
 }
 
 .shuffle-toggle-text {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-secondary);
   padding-left: 0;
@@ -644,7 +644,7 @@ input::placeholder {
 
 .participant-list-label {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-secondary);
   padding-left: 4px;
@@ -1101,7 +1101,7 @@ body.participant-reorder-active .participant-name-input {
 }
 
 .advanced-options-toggle-text {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -2401,4 +2401,170 @@ body.participant-reorder-active .participant-name-input {
     padding: 10px 14px;
     font-size: 13px;
   }
+}
+
+/* Confirmation Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+}
+
+.light .modal-overlay {
+  background: rgba(244, 246, 249, 0.6);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-scale {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.modal-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  padding: 36px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-main), 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.light .modal-container {
+  box-shadow: var(--shadow-main), 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.modal-icon-container {
+  width: 64px;
+  height: 64px;
+  background: rgba(224, 108, 117, 0.1);
+  border: 1.5px solid rgba(224, 108, 117, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.light .modal-icon-container {
+  background: rgba(194, 64, 76, 0.08);
+  border-color: rgba(194, 64, 76, 0.2);
+}
+
+.modal-icon {
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.modal-message {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-btn--cancel {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+.modal-btn--cancel:hover {
+  background: var(--bg-secondary);
+  filter: brightness(1.1);
+  border-color: var(--text-muted);
+}
+
+.modal-btn--confirm {
+  background: var(--grok-accent);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(224, 108, 117, 0.2);
+}
+
+.modal-btn--confirm:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 16px rgba(224, 108, 117, 0.35);
+  transform: translateY(-1px);
+}
+
+.modal-btn--confirm:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .modal-container {
+    padding: 28px 20px;
+  }
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}
+
+/* Rounds input row layout */
+.field-row {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.field-row label {
+  padding-left: 4px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.field-row input[type="number"] {
+  width: 90px;
+  text-align: center;
+  padding: 10px 14px;
+  margin: 0;
 }
