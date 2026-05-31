@@ -17,6 +17,11 @@ import {
 } from "../config/participants";
 import AdvancedScoringOptions from "./AdvancedScoringOptions";
 import { createDefaultScoringConfig } from "../engine/fantasyScoring.js";
+import {
+  getInitialDraftSetup,
+  restoreParticipants,
+  saveDraftSetupSession,
+} from "../config/draftSetupSession.js";
 
 const AI_COLORS = {
   Claude: "var(--claude-accent)",
@@ -104,10 +109,12 @@ function ParticipantCardContent({
 
 function DraftControls({ onStart }) {
   const [setupStep, setSetupStep] = useState("loading");
-  const [league, setLeague] = useState("NBA");
-  const [rounds, setRounds] = useState(10);
+  const [league, setLeague] = useState(() => getInitialDraftSetup().league);
+  const [rounds, setRounds] = useState(() => getInitialDraftSetup().rounds);
   const [participants, setParticipants] = useState([]);
-  const [shuffleOrder, setShuffleOrder] = useState(true);
+  const [shuffleOrder, setShuffleOrder] = useState(
+    () => getInitialDraftSetup().shuffleOrder,
+  );
   const listRef = useRef(null);
   const lineRef = useRef(null);
   const previewRef = useRef(null);
@@ -115,10 +122,15 @@ function DraftControls({ onStart }) {
   const dropAtRef = useRef(null);
   const dragMetaRef = useRef(null);
   const [liftedSlot, setLiftedSlot] = useState(null);
-  const [fantasyScoring, setFantasyScoring] = useState(() =>
-    createDefaultScoringConfig("NBA"),
+  const [fantasyScoring, setFantasyScoring] = useState(() => {
+    const saved = getInitialDraftSetup();
+    return (
+      saved.fantasyScoring || createDefaultScoringConfig(saved.league)
+    );
+  });
+  const [customRules, setCustomRules] = useState(
+    () => getInitialDraftSetup().customRules,
   );
-  const [customRules, setCustomRules] = useState("");
 
   const [apiKeys, setApiKeys] = useState(loadStoredApiKeys);
 
@@ -169,7 +181,11 @@ function DraftControls({ onStart }) {
         setSetupStep(step);
         if (step === "draft") {
           setParticipants(
-            buildDefaultParticipants(nextEnvKeys, loadStoredApiKeys()),
+            restoreParticipants(
+              getInitialDraftSetup().participants,
+              nextEnvKeys,
+              loadStoredApiKeys(),
+            ),
           );
         }
       } catch (err) {
@@ -189,6 +205,27 @@ function DraftControls({ onStart }) {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (setupStep !== "draft") return;
+
+    saveDraftSetupSession({
+      league,
+      rounds,
+      shuffleOrder,
+      customRules,
+      fantasyScoring,
+      participants,
+    });
+  }, [
+    setupStep,
+    league,
+    rounds,
+    shuffleOrder,
+    customRules,
+    fantasyScoring,
+    participants,
+  ]);
 
   const handleApiKeyChange = (key, value) => {
     setApiKeys((prev) => {
@@ -408,7 +445,13 @@ function DraftControls({ onStart }) {
         apiKeys={apiKeys}
         onApiKeyChange={handleApiKeyChange}
         onContinue={() => {
-          setParticipants(buildDefaultParticipants(envKeys, apiKeys));
+          setParticipants(
+            restoreParticipants(
+              getInitialDraftSetup().participants,
+              envKeys,
+              apiKeys,
+            ),
+          );
           setSetupStep("draft");
         }}
       />

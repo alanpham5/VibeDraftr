@@ -11,12 +11,12 @@ cp .env.example .env
 
 Add API keys to `.env` in the project root (same folder as `package.json`). `.env.local` is also loaded and overrides `.env` if present.
 
-| Variable | Provider |
-| --- | --- |
-| `ANTHROPIC_API_KEY` | [Anthropic](https://console.anthropic.com/) |
-| `OPENAI_API_KEY` | [OpenAI](https://platform.openai.com/) |
-| `GOOGLE_API_KEY` | [Google AI Studio](https://aistudio.google.com/) |
-| `XAI_API_KEY` | [xAI](https://console.x.ai/) |
+| Variable            | Provider                                         |
+| ------------------- | ------------------------------------------------ |
+| `ANTHROPIC_API_KEY` | [Anthropic](https://console.anthropic.com/)      |
+| `OPENAI_API_KEY`    | [OpenAI](https://platform.openai.com/)           |
+| `GOOGLE_API_KEY`    | [Google AI Studio](https://aistudio.google.com/) |
+| `XAI_API_KEY`       | [xAI](https://console.x.ai/)                     |
 
 ## CLI
 
@@ -27,11 +27,11 @@ npm run draft -- --league NBA --rounds 10
 npm run draft -- --league NHL --rounds 15 --strategy "prioritize defensemen and goalies"
 ```
 
-| Flag | Default | Description |
-| --- | --- | --- |
-| `--league` | `NBA` | `NBA` or `NHL` |
-| `--rounds` | `15` | Draft rounds |
-| `--strategy` | — | Applied to every AI |
+| Flag         | Default | Description         |
+| ------------ | ------- | ------------------- |
+| `--league`   | `NBA`   | `NBA` or `NHL`      |
+| `--rounds`   | `5`     | Draft rounds        |
+| `--strategy` | —       | Applied to every AI |
 
 Writes `output/teams.json` and `output/draft_log.txt`.
 
@@ -59,7 +59,7 @@ If any keys are missing from `.env`, the app asks for them first (saved in brows
 - Choose **NBA** or **NHL** and set **rounds** (1–30)
 - **Shuffle order** (on by default) randomizes pick order at start; turn it off to **drag participants** into manual order
 - Build the participant list: remove with **×**, add AIs with **+ Claude**, etc., or add one or more humans with **+ Human**
-- Edit human names inline (each human gets their own turn label, e.g. `Alex's pick`)
+- Edit human names inline (each human gets their own turn label, e.g. `Alan's pick`)
 - Set an optional **strategy per AI** (shown under each name during the draft)
 - Open **Advanced Options → Scoring & draft rules** for optional custom scoring and league constraints
 - At least two participants required
@@ -74,11 +74,11 @@ If any keys are missing from `.env`, the app asks for them first (saved in brows
 
 Team boards show fantasy points from the current season’s box score stats (NBA via NBA.com; NHL via NHL.com). By default:
 
-| League | Formula |
-| --- | --- |
-| **NBA** | PTS × 1, REB × 1.25, AST × 1.5, STL × 2, BLK × 2, TOV × −0.5, 3PM × 0.5 |
+| League          | Formula                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| **NBA**         | PTS × 1, REB × 1.25, AST × 1.5, STL × 2, BLK × 2, TOV × −0.5, 3PM × 0.5                      |
 | **NHL skaters** | Goals × 3, Assists × 2, Shots × 0.4, Plus/Minus × 0.5, PIM × −0.25, PP Points × 0.5, GWG × 1 |
-| **NHL goalies** | Wins × 4, Saves × 0.08, Shutouts × 3, Goals Against × −1 |
+| **NHL goalies** | Wins × 4, Saves × 0.08, Shutouts × 3, Goals Against × −1                                     |
 
 In **Advanced Options**, you can enable a custom formula with any supported stats and coefficients (use negatives for penalties, e.g. turnovers).
 
@@ -102,20 +102,20 @@ Light, dark, and system theme modes are available in the header. The tab favicon
 
 ## Architecture
 
-| Path | Role |
-| --- | --- |
-| `src/engine/` | Draft loop, prompts, API clients, fantasy scoring |
-| `src/engine/sportsApi.js` | NBA/NHL player stats and roster scoring |
-| `server.js` | Express API and SSE stream |
-| `loadEnv.js` | Loads `.env` / `.env.local` from project root |
-| `src/` | React UI |
-| `cli.js` | CLI entry (unchanged four-agent flow) |
+| Path                      | Role                                              |
+| ------------------------- | ------------------------------------------------- |
+| `src/engine/`             | Draft loop, prompts, API clients, fantasy scoring |
+| `src/engine/sportsApi.js` | NBA/NHL player stats and roster scoring           |
+| `server.js`               | Express API and SSE stream                        |
+| `loadEnv.js`              | Loads `.env` / `.env.local` from project root     |
+| `src/`                    | React UI                                          |
+| `cli.js`                  | CLI entry (unchanged four-agent flow)             |
 
 ## Models
 
-| AI | Model | API |
-| --- | --- | --- |
-| Claude | `claude-sonnet-4-5` | Anthropic Messages |
-| ChatGPT | `gpt-4o` | OpenAI Chat Completions |
-| Gemini | `gemini-2.5-flash` | Google Generative Language |
-| Grok | `grok-3-latest` | xAI Chat Completions |
+| AI      | Model               | API                        |
+| ------- | ------------------- | -------------------------- |
+| Claude  | `claude-sonnet-4-6` | Anthropic Messages         |
+| ChatGPT | `gpt-5-mini`        | OpenAI Chat Completions    |
+| Gemini  | `gemini-2.5-flash`  | Google Generative Language |
+| Grok    | `grok-3-latest`     | xAI Chat Completions       |
