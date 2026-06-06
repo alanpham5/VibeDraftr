@@ -100,6 +100,31 @@ In **Advanced Options**, you can enable a custom formula with any supported stat
 
 Light, dark, and system theme modes are available in the header. The tab favicon follows your OS color scheme.
 
+## Application Flow
+
+VibeDraftr provides a visual Web UI to configure and run drafts:
+
+### 1. Draft Setup
+
+Before starting a draft, you can configure the league (**NBA** or **NHL**), set the number of **rounds**, customize the drafting order (drag and drop participants when shuffle order is disabled), assign custom AI strategies, and define custom scoring rules under **Advanced Options**.
+
+![Draft Setup Menu](public/screenshots/draftsetup.png)
+
+### 2. Draft Execution
+
+Once the draft starts, the flow proceeds in snake order. The app tracks duplicate players, handles live API queries, and streams pick decisions in real time.
+
+- **AI Turns:** Models dynamically make picks based on their customized strategies and rules.
+- **Human Turns:** A manual pick input bar appears at the bottom of the screen.
+
+#### NBA Draft
+
+![NBA Draft in Action](public/screenshots/nba.png)
+
+#### NHL Draft
+
+![NHL Draft in Action](public/screenshots/nhl.png)
+
 ## Architecture
 
 | Path                      | Role                                              |
